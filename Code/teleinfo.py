@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import configparser
 import sys, serial, time, logging, logging.config, pprint, datetime, sqlite3, pymongo
 from pymongo import MongoClient
 
@@ -18,9 +18,6 @@ from pymongo import MongoClient
 # IINST 002 Y
 # IMAX 030 B
 # PAPP 00420 '
-
-baudRate = 1200
-perif = 'ttyS0'
 
 
 def lectureTrame(ser):
@@ -115,8 +112,13 @@ def ligneToMongo(lignes):
 
 if __name__ == '__main__':
     # Initialisation Logger
-    logging.config.fileConfig('/home/pi/teleinfo/python/logging.conf')
+    logging.config.fileConfig('logging.conf')
     logger = logging.getLogger(__name__)
+    # loading config file
+    config = configparser.ConfigParser()
+    config.read('config.conf')
+    perif = config['Compteur']['port']
+    baudRate = config[config['Compteur']['Type']]['BaudRate']
     # Lecture du port serie
     ser = serial.Serial('/dev/'+perif, baudRate, 7, 'E', 1, timeout=1)
     ser.open()
