@@ -20,58 +20,66 @@ from pymongo import MongoClient
 # PAPP 00420 '
 
 # Mode Standard HC WE
-# ADSC 000000000000 6
-# VTIC 02 J
-# DATE H180128174015 G
-# NGTF HC et Week-End U
-# LTARF HEURE WEEK-END 4
-# EAST 002050290 !
-# EASF01 000784280 ?
-# EASF02 001154049 ;
-# EASF03 000111961 7
-# EASF04 000000000 %
-# EASF05 000000000 &
-# EASF06 000000000 '
-# EASF07 000000000 (
-# EASF08 000000000 )
-# EASF09 000000000 *
-# EASF10 000000000 "
-# EASD01 001010341 *
-# EASD02 001039949 D
-# EASD03 000000000 "
-# EASD04 000000000 #
-# IRMS1 007 5
-# URMS1 210 =
-# PREF 09 H
-# PCOUP 09 "
-# SINSTS 01415 Q
-# SMAXSN H180128132221 05374 ?
-# SMAXSN-1 H180127195647 04715 /
-# UMOY1 H180128174000 208 8
-# STGE 002A4800 D
-# MSG1 PAS DE MESSAGE <
-# PRM 00000000000000 :
-# RELAIS 001 C
-# NTARF 03 P
-# NJOURF 01 '
-# NJOURF+1 00 B
+# ADSC 000000000000 6 - adresse sec compteur - serial no
+# VTIC 02 J - Version TIC
+# DATE H180128174015 G - Date et heure courante
+# NGTF HC et Week-End U - Nom tarif
+# LTARF HEURE WEEK-END 4 - Tarif actuel
+# EAST 002050290 ! - Index Total
+# EASF01 000784280 ? - Index 1 - HP
+# EASF02 001154049 ; - index 2 - HC
+# EASF03 000111961 7 - Index 3 - WE
+# EASF04 000000000 % - Index 4
+# EASF05 000000000 & - Index 5
+# EASF06 000000000 ' - Index 6
+# EASF07 000000000 ( - Index 7
+# EASF08 000000000 ) - Index 8
+# EASF09 000000000 * - Index 9
+# EASF10 000000000 " - Index 10
+# EASD01 001010341 * - Index Ditri 1
+# EASD02 001039949 D - Index Distri 2
+# EASD03 000000000 " - Index Distri 3
+# EASD04 000000000 # - Index Distri 4
+# IRMS1 007 5 - Courant Efficace
+# URMS1 210 = - Tension efficace
+# PREF 09 H - Puissance ref
+# PCOUP 09 " - Puissance coupure
+# SINSTS 01415 Q - Puissance instantane
+# SMAXSN H180128132221 05374 ? - Pmax jour n
+# SMAXSN-1 H180127195647 04715 / - Pmax jour n-1
+# UMOY1 H180128174000 208 8 - Tension moyenne
+# STGE 002A4800 D - Registre status
+    # 0 Contact sec
+    # 1 Organe de coupure
+    # 2 Cache bornes
+    # 3 N/A
+    # 4 Surtension
+    # 5 Depassement Pref
+    # 6 prod/conso
+    # 7
+    # 8
+# MSG1 PAS DE MESSAGE < - Message court
+# PRM 00000000000000 : - Point de livraison
+# RELAIS 001 C - Relais
+# NTARF 03 P - Numero index en cours
+# NJOURF 01 ' - Numero jour tarifaire en cours
+# NJOURF+1 00 B - Numero prochain jour tarifaire
 
 
 def lectureTrame(ser):
     """Lecture d'une trame sur le port serie specifie en entree.
     La trame debute par le caractere STX (002 h) et fini par ETX (003 h)"""
-    logger = logging.getLogger(__name__)
     # Lecture d'eventuel caractere avant le debut de trame
     # Jusqu'au caractere \x02 + \n (= \x0a)
     trame = list()
     while trame[-2:] != ['\x02', '\n']:
         trame.append(ser.read(1))
-    logger.debug('Lecture de caracteres avant trame : \n' + pprint.pformat(trame))
+    print('Lecture de caracteres avant trame : \n' + pprint.pformat(trame))
     # Lecture de la trame jusqu'au caractere \x03
     trame = list()
     while trame[-1:] != ['\x03']:
         trame.append(ser.read(1))
-    logger.debug('Lecture de caracteres trame (avant pop) : ' + pprint.pformat(trame))
+    print('Lecture de caracteres trame (avant pop) : ' + pprint.pformat(trame))
     # Suppression des caracteres de fin '\x03' et '\r' de la liste
     trame.pop()
     trame.pop()
@@ -80,7 +88,6 @@ def lectureTrame(ser):
 
 def decodeTrame(trame):
     """Decode une trame complete et renvoie un dictionnaire des elements"""
-    logger = logging.getLogger(__name__)
     # Separation de la trame en groupe
     lignes = trame.split('\r\n')
     logger.debug('Groupes de la trame : \n' + pprint.pformat(lignes))
@@ -93,7 +100,6 @@ def decodeTrame(trame):
 
 def valideLigne(ligne):
     """Retourne les elements d'une ligne sous forme de tuple si le checksum est ok"""
-    logger = logging.getLogger(__name__)
     chk = checksumLigne(ligne)
     items = ligne.split(' ')
     if ligne[-1] == chk:
@@ -105,7 +111,6 @@ def valideLigne(ligne):
 
 def checksumLigne(ligne):
     """Verifie le checksum d'une ligne et retourne un tuple"""
-    logger = logging.getLogger(__name__)
     sum = 0
     for ch in ligne[:-2]:
         sum += ord(ch)
