@@ -1,5 +1,5 @@
 function setup() {
-  loadJSON("./state.json",realTime);
+  loadJSON("../Script/state.json",realTime);
   setTimeout(setup, 5000)
 }
 
