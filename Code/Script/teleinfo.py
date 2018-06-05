@@ -70,16 +70,11 @@ def lectureTrame(ser):
     # Lecture d'eventuel caractere avant le debut de trame
     # Jusqu'au caractere \x02 + \n (= \x0a)
     trame = list()
-    while trame[-2:] != ['\x02', '\n']:
-        trame.append(ser.read(1))
+    while ser.read() != b'\x02':
+        pass;
+    while b'\x03' not in trame:
+        trame.append(ser.read(1).upper())
     print('Lecture de caracteres avant trame : \n' + pprint.pformat(trame))
-    # Lecture de la trame jusqu'au caractere \x03
-    trame = list()
-    while trame[-1:] != ['\x03']:
-        trame.append(ser.read(1))
-    print('Lecture de caracteres trame (avant pop) : ' + pprint.pformat(trame))
-    # Suppression des caracteres de fin '\x03' et '\r' de la liste
-    trame.pop()
     trame.pop()
     return trame
 
