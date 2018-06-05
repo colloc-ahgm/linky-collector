@@ -13,5 +13,5 @@ PyYAML==3.12
 scikit-learn==0.19.1
 scipy==1.0.1
 seaborn==0.8.1
-serial==0.0.66
+pySerial
 six==1.11.0
