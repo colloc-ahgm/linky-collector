@@ -59,6 +59,7 @@
 # NTARF 03 P - Numero index en cours
 # NJOURF 01 ' - Numero jour tarifaire en cours
 # NJOURF+1 00 B - Numero prochain jour tarifaire
+import pprint
 import time
 
 import serial as serial
