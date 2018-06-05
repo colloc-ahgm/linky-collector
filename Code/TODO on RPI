@@ -31,3 +31,6 @@ perif = ttyAMA0 || ttyS0
 stty -F /dev/perif baudRate sane evenp parenb cs7 -crtscts
 
 cat /dev/perif
+
+
+suivre ça : https://spellfoundry.com/2016/05/29/configuring-gpio-serial-port-raspbian-jessie-including-pi-3/

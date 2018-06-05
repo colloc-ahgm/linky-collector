@@ -3,15 +3,16 @@
 # Trame commence par STX et fini par ETX
 # Exemple pour tarif HC WE
 
-# MOTDETAT 000000 B
-# ADCO 200000294579 P
+# ADCO 031662562760 C //adresse
 # OPTARIF BASE 0
-# ISOUSC 30 9
-# BASE 002565285 ,
-# PTEC TH.. $
-# IINST 002 Y
-# IMAX 030 B
-# PAPP 00420 '
+# ISOUSC 30 9 //souscrit
+# BASE 002582035 $ //index
+# PTEC TH.. $ //Periode tarif
+# IINST 001 X //Insentite inst
+# IMAX 090 H
+# PAPP 00310 % //Puissance inst
+# HHPHC A //Option horaire
+# MOTDETAT 000000 B
 
 # Mode Standard HC WE
 # ADSC 000000000000 6 - adresse sec compteur - serial no
@@ -58,3 +59,100 @@
 # NTARF 03 P - Numero index en cours
 # NJOURF 01 ' - Numero jour tarifaire en cours
 # NJOURF+1 00 B - Numero prochain jour tarifaire
+import time
+
+import serial as serial
+
+def lectureTrame(ser):
+    """Lecture d'une trame sur le port serie specifie en entree.
+    La trame debute par le caractere STX (002 h) et fini par ETX (003 h)"""
+    # Lecture d'eventuel caractere avant le debut de trame
+    # Jusqu'au caractere \x02 + \n (= \x0a)
+    trame = list()
+    while trame[-2:] != ['\x02', '\n']:
+        trame.append(ser.read(1))
+    print('Lecture de caracteres avant trame : \n' + pprint.pformat(trame))
+    # Lecture de la trame jusqu'au caractere \x03
+    trame = list()
+    while trame[-1:] != ['\x03']:
+        trame.append(ser.read(1))
+    print('Lecture de caracteres trame (avant pop) : ' + pprint.pformat(trame))
+    # Suppression des caracteres de fin '\x03' et '\r' de la liste
+    trame.pop()
+    trame.pop()
+    return trame
+
+
+def decodeTrame(trame):
+    """Decode une trame complete et renvoie un dictionnaire des elements"""
+    # Separation de la trame en groupe
+    lignes = trame.split('\r\n')
+    print('Groupes de la trame : \n' + pprint.pformat(lignes))
+    result = {}
+    for ligne in lignes:
+        tuple = valideLigne(ligne)
+        result[tuple[0]] = tuple[1]
+    return result
+
+
+def valideLigne(ligne):
+    """Retourne les elements d'une ligne sous forme de tuple si le checksum est ok"""
+    chk = checksumLigne(ligne)
+    items = ligne.split(' ')
+    if ligne[-1] == chk:
+        return (items[0], items[1])
+    else:
+        print("Pb de checksum : calcul = " + chk + " / chk dans trame = " + items[2])
+        raise Exception("Checksum error")
+
+
+def checksumLigne(ligne):
+    """Verifie le checksum d'une ligne et retourne un tuple"""
+    sum = 0
+    for ch in ligne[:-2]:
+        sum += ord(ch)
+    sum = (sum & 63) + 32
+    print("Checksum ligne : " + ligne + " ==> " + chr(sum))
+    return chr(sum)
+
+
+def ligneToCSV(lignes, cles):
+    ligneCSV = list()
+    ligneCSV.append(time.strftime("%Y-%m-%d", time.localtime()))
+    ligneCSV.append(time.strftime("%H:%M:%S", time.localtime()))
+    for cle in cles:
+        # Attention, transformation de String en Int ... Toutes les cles ne fonctionnent pas !!!
+        # Double conversion pour supprimer les 0 a gauche
+        valeur = str(int(lignes[cle]))
+        ligneCSV.append(valeur)
+    return ";".join(ligneCSV)
+
+
+if __name__ == '__main__':
+    perif = "ttyAMA0"
+    baudRate = 1200
+    ser = serial.Serial('/dev/'+perif, baudRate, 7, 'E', 1, timeout=1)
+    ser.open()
+
+    for i in range(2):
+        error = False
+        ligneCSV = ''
+        try:
+            trame = lectureTrame(ser)
+            # traitement de la trame
+            lignes = decodeTrame("".join(trame))
+            # export CSV
+            ligneCSV = ligneToCSV(lignes, ['BASE', 'IINST', 'PAPP', 'HHPHC'])
+            # Insertion en base
+            # ligneToSQLite(lignes)
+        except Exception as e:
+            print("Erreur : " + str(e))
+            print("Pb de lecture -> tentative complementaire " + str(i))
+            error = True
+
+        if not error:
+            break;
+    print
+    ligneCSV
+
+    ser.close()

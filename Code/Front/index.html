@@ -16,7 +16,8 @@
     <div class="row">
         <div class="col-sm-9">
             <p>Et si on monitorait notre conso ?</p>
-            <canvas id="myChart" width="850" height="450"></canvas>
+            <canvas id="myChart"  style="position: relative; height:80vh; width:85vw"></canvas>
+            <canvas id="HCHP" style="position: relative; height:80vh; width:85vw"></canvas>
         </div>
         <div class="col-sm-3">
             <div class="card" id="inst">
@@ -25,6 +26,13 @@
                 <p id="dataInst"><i class="fa fa-refresh fa-spin" style="font-size:24px"></i> Loading ...</p>
                 </div>
             </div>
+            <p> Faire chier les collocs :</p>
+            <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
+            <form enctype='application/json' name="submitForm" method="POST" action="https://api.pushjet.io/message" target="dummyframe">
+                <input type="hidden" name="secret" value="298bb44be4c4e48182e7cf51f2bf1158">
+                <input type="text" name="message" value="Enculés !">
+                <A HREF="javascript:document.submitForm.submit()">Click Me</A>
+            </form>
         </div>
     </div>
 </div>
