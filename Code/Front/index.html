@@ -5,16 +5,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="./css/mystyle.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
     <script src="./script/p5.js"></script>
     <script src="./script/main.js"></script>
     <title>Mon linky</title>
 </head>
 <body>
 <div class="container">
-    <h1><i class="fa fa-bolt animated-hover"></i> Mon compteur EDF ♥ </h1>
+    <h1><i class="fa fa-bolt"></i> Mon compteur EDF ♥ </h1>
     <div class="row">
         <div class="col-sm-9">
             <p>Et si on monitorait notre conso ?</p>
+            <canvas id="myChart" width="850" height="450"></canvas>
         </div>
         <div class="col-sm-3">
             <div class="card" id="inst">
