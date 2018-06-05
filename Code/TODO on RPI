@@ -1,0 +1,36 @@
+- Raspbian Jessie
+
+/boot/cmdline.txt
+- supprimer la ligne :
+console=serial0,115200
+- ajouter la ligne : 
+enable_uart=1
+
+On peut utiliser le "mini UART" /dev/ttyS0
+(Full UART : /dev/ttyAMA0)
+
+- Old version
+
+/boot/cmdline.txt
+- supprimer les paramètres suivants :
+console=ttyAMA0,115200 kgdboc=ttyAMA0,115200
+
+/etc/inittab
+- commentez la ligne suivante (tout en bas du fichier) en ajoutant un # devant :
+#T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100
+
+
+
+
+
+REBOOT
+
+baudRate = 9600 || 1200
+perif = ttyAMA0 || ttyS0
+
+stty -F /dev/perif baudRate sane evenp parenb cs7 -crtscts
+
+cat /dev/perif
+
+
+suivre ça : https://spellfoundry.com/2016/05/29/configuring-gpio-serial-port-raspbian-jessie-including-pi-3/
