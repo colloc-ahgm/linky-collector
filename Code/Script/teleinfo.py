@@ -60,6 +60,7 @@
 # NJOURF 01 ' - Numero jour tarifaire en cours
 # NJOURF+1 00 B - Numero prochain jour tarifaire
 import pprint
+import sys
 import time
 import json
 import serial as serial
@@ -134,29 +135,35 @@ if __name__ == '__main__':
     baudRate = 1200
     ser = serial.Serial('/dev/'+perif, baudRate, 7, 'E', 1, timeout=1)
     # ser.open()
+    try:
+        while True:
+            for i in range(2):
+                error = False
+                ligneCSV = ''
+                ligneJSON = ''
+                try:
+                    trame = lectureTrame(ser)
+                    # traitement de la trame
+                    lignes = decodeTrame(''.join(trame))
+                    # export CSV
+                    # ligneCSV = ligneToCSV(lignes, ['BASE', 'IINST', 'PAPP', 'HHPHC'])
+                    # Insertion en base
+                    # ligneToSQLite(lignes)
+                except Exception as e:
+                    print("Erreur : " + str(e))
+                    print("Pb de lecture -> tentative complementaire " + str(i))
+                    error = True
 
-    for i in range(2):
-        error = False
-        ligneCSV = ''
-        ligneJSON = ''
-        try:
-            trame = lectureTrame(ser)
-            # traitement de la trame
-            lignes = decodeTrame(''.join(trame))
-            # export CSV
-            # ligneCSV = ligneToCSV(lignes, ['BASE', 'IINST', 'PAPP', 'HHPHC'])
-            # Insertion en base
-            # ligneToSQLite(lignes)
-        except Exception as e:
-            print("Erreur : " + str(e))
-            print("Pb de lecture -> tentative complementaire " + str(i))
-            error = True
-
-        if not error:
-            break;
-    # print
-    # ligneCSV
-    with open('out.json','w') as outFile:
-        json.dump(lignes, outFile)
+                if not error:
+                    break;
+            # print
+            # ligneCSV
+            with open('out.json','w') as outFile:
+                json.dump(lignes, outFile)
+            print( 'ok')
+            time.sleep(5)
+    except KeyboardInterrupt:
+        pass
 
     ser.close()
+    print('fini')
