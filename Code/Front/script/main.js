@@ -4,7 +4,7 @@ var HP = 0;
 var WE = 0;
 
 function setup() {
-  loadJSON("./script/out.json",realTime);
+  loadJSON("out.json",realTime);
   if (i == 0) drawGraph();
   i ++;
   setTimeout(setup, 5000)
