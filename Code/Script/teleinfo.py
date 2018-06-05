@@ -133,7 +133,7 @@ if __name__ == '__main__':
     perif = "ttyAMA0"
     baudRate = 1200
     ser = serial.Serial('/dev/'+perif, baudRate, 7, 'E', 1, timeout=1)
-    ser.open()
+    # ser.open()
 
     for i in range(2):
         error = False
