@@ -162,7 +162,7 @@ if __name__ == '__main__':
                 # ligneCSV
                 with open('out.json','w') as outFile:
                     json.dump(lignes, outFile)
-                print( 'ok')
+                print( 'ok | ' + j)
                 time.sleep(2)
         except KeyboardInterrupt:
             pass
