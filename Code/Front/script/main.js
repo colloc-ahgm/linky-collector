@@ -35,7 +35,7 @@ function realTime(data) {
 
     document.getElementById("dataInst").innerHTML = "Conso : <span class = \"" + instColor + "\">" + inst + " </span>W </br> Tarif : <span class = \""+tarifColor+"\">" + tarif + "</span></br> Max Jour : " + maxDay + " A";
 
-    document.getElementById("dataPlus").innerHTML = "Cumulé : "+ data.BASE +" kWh </br> ADCO : "+data.ADCO+" </br> I inst : "+data.IINST+" A </br> Tarif : "+ data.PTEC;
+    document.getElementById("dataPlus").innerHTML = "Cumulé : "+ data.BASE/1000 +" kWh </br> ADCO : "+data.ADCO+" </br> I inst : "+data.IINST+" A </br> Tarif : "+ data.PTEC;
 
 }
 
