@@ -33,7 +33,7 @@ function realTime(data) {
 
     if(inst > 6000*0.8) instColor = "red";
 
-    document.getElementById("dataInst").innerHTML = "Conso : <span class = \"" + instColor + "\">" + inst + " </span>W </br> Tarif : <span class = \""+tarifColor+"\">" + tarif + "</span></br> Max Jour : " + maxDay + " W";
+    document.getElementById("dataInst").innerHTML = "Conso : <span class = \"" + instColor + "\">" + inst + " </span>W </br> Tarif : <span class = \""+tarifColor+"\">" + tarif + "</span></br> Max Jour : " + maxDay + " A";
 
     document.getElementById("dataPlus").innerHTML = "Cumulé : "+ data.INDEX +" kWh </br> ADCO : "+data.ADCO+" </br> I inst : "+data.IINST+" A </br> Tarif : "+ data.PTEC;
 
