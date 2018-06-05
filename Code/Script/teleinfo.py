@@ -161,7 +161,7 @@ if __name__ == '__main__':
             # ligneCSV
             with open('out.json','w') as outFile:
                 json.dump(lignes, outFile)
-            print( 'ok | ' + j)
+            print( 'ok | ' + str(j))
             time.sleep(5)
 
         ser.close()
