@@ -75,7 +75,6 @@ def lectureTrame(ser):
         pass;
     while '\x03' not in trame:
         trame.append(ser.read(1).decode("ascii"))
-    print('Lecture de caracteres avant trame : \n' + pprint.pformat(trame))
     trame.pop(0)
     trame.pop()
     trame.pop()
