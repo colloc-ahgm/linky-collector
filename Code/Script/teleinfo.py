@@ -61,7 +61,7 @@
 # NJOURF+1 00 B - Numero prochain jour tarifaire
 import pprint
 import time
-
+import json
 import serial as serial
 
 def lectureTrame(ser):
@@ -72,9 +72,11 @@ def lectureTrame(ser):
     trame = list()
     while ser.read() != b'\x02':
         pass;
-    while b'\x03' not in trame:
-        trame.append(ser.read(1).upper())
+    while '\x03' not in trame:
+        trame.append(ser.read(1).decode("ascii"))
     print('Lecture de caracteres avant trame : \n' + pprint.pformat(trame))
+    trame.pop(0)
+    trame.pop()
     trame.pop()
     return trame
 
@@ -119,7 +121,10 @@ def ligneToCSV(lignes, cles):
     for cle in cles:
         # Attention, transformation de String en Int ... Toutes les cles ne fonctionnent pas !!!
         # Double conversion pour supprimer les 0 a gauche
-        valeur = str(int(lignes[cle]))
+#        if cle =! 'HHPHC':
+#            valeur = str(int(lignes[cle]))
+#       else :
+        valeur = str(lignes [cle])
         ligneCSV.append(valeur)
     return ";".join(ligneCSV)
 
@@ -133,10 +138,11 @@ if __name__ == '__main__':
     for i in range(2):
         error = False
         ligneCSV = ''
+        ligneJSON = ''
         try:
             trame = lectureTrame(ser)
             # traitement de la trame
-            lignes = decodeTrame("".join(trame))
+            lignes = decodeTrame(''.join(trame))
             # export CSV
             ligneCSV = ligneToCSV(lignes, ['BASE', 'IINST', 'PAPP', 'HHPHC'])
             # Insertion en base
@@ -150,5 +156,7 @@ if __name__ == '__main__':
             break;
     print
     ligneCSV
+    with open('out.json','w') as outFile:
+        json.dump(lignes, outFile)
 
     ser.close()
