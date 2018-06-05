@@ -12,7 +12,7 @@ function setup() {
 
 function realTime(data) {
   //document.write(data.inst);
-    var inst = data.PAPP;
+    var inst = parseInt(data.PAPP);
     var instColor = "black";
     var tarif = data.HHPHC;
     var tarifColor = "black";
