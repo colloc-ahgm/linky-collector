@@ -144,7 +144,7 @@ if __name__ == '__main__':
             # traitement de la trame
             lignes = decodeTrame(''.join(trame))
             # export CSV
-            ligneCSV = ligneToCSV(lignes, ['BASE', 'IINST', 'PAPP', 'HHPHC'])
+            # ligneCSV = ligneToCSV(lignes, ['BASE', 'IINST', 'PAPP', 'HHPHC'])
             # Insertion en base
             # ligneToSQLite(lignes)
         except Exception as e:
@@ -155,7 +155,7 @@ if __name__ == '__main__':
         if not error:
             break;
     print
-    ligneCSV
+    # ligneCSV
     with open('out.json','w') as outFile:
         json.dump(lignes, outFile)
 
