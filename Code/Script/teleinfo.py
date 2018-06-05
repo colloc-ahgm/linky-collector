@@ -163,7 +163,7 @@ if __name__ == '__main__':
                 with open('out.json','w') as outFile:
                     json.dump(lignes, outFile)
                 print( 'ok | ' + j)
-                time.sleep(2)
+                time.sleep(5)
         except KeyboardInterrupt:
             pass
 
