@@ -4,7 +4,7 @@ var HP = 0;
 var WE = 0;
 
 function setup() {
-  loadJSON("../Script/state.json",realTime);
+  loadJSON("out.json",realTime);
   if (i == 0) drawGraph();
   i ++;
   setTimeout(setup, 5000)
@@ -12,21 +12,31 @@ function setup() {
 
 function realTime(data) {
   //document.write(data.inst);
-    var inst = data.inst;
+    var inst = data.PAPP;
     var instColor = "black";
-    var tarif = data.tarif;
+    var tarif = data.HHPHC;
     var tarifColor = "black";
-    var maxDay = data.maxDay;
+    var maxDay = data.IMAX;
 
-    if(tarif == "HP") tarifColor = "red";
-    if(tarif == "HC") tarifColor = "green";
-    if(tarif == "WE") tarifColor = "blue";
+    if(tarif == "A") {
+        tarif = "HP";
+        tarifColor = "red";
+    }
+    if(tarif == "B") {
+        tarif = "HC";
+        tarifColor = "green";
+    }
+    if(tarif == "C") {
+        tarif = "WE";
+        tarifColor = "blue";
+    }
 
-    if(inst > data.maxP*0.8) instColor = "red";
+    if(inst > 6000*0.8) instColor = "red";
 
     document.getElementById("dataInst").innerHTML = "Conso : <span class = \"" + instColor + "\">" + inst + " </span>W </br> Tarif : <span class = \""+tarifColor+"\">" + tarif + "</span></br> Max Jour : " + maxDay + " W";
 
-    document.getElementById("dataPlus").innerHTML = "Cumulé : "+ data.INDEX +" kWh"
+    document.getElementById("dataPlus").innerHTML = "Cumulé : "+ data.INDEX +" kWh </br> ADCO : "+data.ADCO+" </br> I inst : "+data.IINST+" A </br> Tarif : "+ data.PTEC;
+
 }
 
 function drawGraph() {

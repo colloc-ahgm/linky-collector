@@ -154,7 +154,7 @@ if __name__ == '__main__':
 
         if not error:
             break;
-    print
+    # print
     # ligneCSV
     with open('out.json','w') as outFile:
         json.dump(lignes, outFile)
