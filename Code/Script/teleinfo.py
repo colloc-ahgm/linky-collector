@@ -130,7 +130,7 @@ def ligneToCSV(lignes, cles):
 
 
 if __name__ == '__main__':
-    perif = "ttyAMA0"
+    perif = "ttyUSB0"
     baudRate = 1200
     ser = serial.Serial('/dev/' + perif, baudRate, 7, 'E', 1, timeout=1)
     j = 0;
@@ -162,7 +162,7 @@ if __name__ == '__main__':
                 break;
         # print
         # ligneCSV
-        with open('out.json','w') as outFile:
+        with open('../Front/out.json','w') as outFile:
             json.dump(lignes, outFile)
         print('ok | ' + str(j))
         time.sleep(5)
