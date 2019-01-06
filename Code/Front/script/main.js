@@ -47,7 +47,6 @@ function realTime(data) {
 function drawGraph() {
     //data test
     var years = [-45,-40,-35,-30,-25,-20,-15,-10,-5,0]; //x
-    var africa = [0,0,0,0,0,0,0,0,0,inst]; //y
     //draw
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
@@ -56,7 +55,7 @@ function drawGraph() {
         labels: years,
         datasets: [
           {
-            data: africa
+            data: inst
           }
         ]
       },
