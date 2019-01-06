@@ -13,9 +13,10 @@ function setup() {
 function realTime(data) {
   //document.write(data.inst);
     for(var q = 0; q < 9; q++){
-        inst[q] = inst[q+1]
+        inst[q] = inst[q+1];
     }
     inst[9] = parseInt(data.PAPP);
+    console.log(inst);
     var instColor = "black";
     var tarif = data.HHPHC;
     var tarifColor = "black";
